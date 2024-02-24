@@ -1,49 +1,79 @@
 import express, { Express, Request, Response } from "express";
-import Buffer from "buffer";
-
 const app: Express = express();
+import TokenManager from "./utils/TokenManager";
+import { ArtistSearchResponse, TrackResponse } from "./utils/types";
+import { errorHandler } from "./errors/errorHandler";
+import { NotFound } from "./errors/notFound";
+
+/* Body parser */
+app.use(express.json())
+
+/* Singleton class that manages Spotify token & refreshes it */
+const tokenManager = TokenManager.getInstance()
 
 
-app.get("/token", async (req: Request, res: Response) => {
+app.get("/artists", async (req: Request, res: Response) => {
+  const { artist_search_keyword } = req.body.data
+  const token = await tokenManager.getToken();  
 
-  const client_id = process.env.CLIENT_ID;
-  const client_secret = process.env.CLIENT_SECRET;
+  const params = new URLSearchParams({
+    q: artist_search_keyword,
+    type: "artist",
+    market: "US",
+    limit: "10",
+  });
 
-  try {
-    const response = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?${params}`,
+    {
       headers: {
-        Authorization:
-          "Basic " +
-          Buffer.Buffer.from(client_id + ":" + client_secret).toString(
-            "base64"
-          ),
-        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token.value}`,
       },
-      body: `grant_type=client_credentials`,
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error("Failed to fetch access token");
     }
+  );
 
-    const token = data //data.access_token
-    res.json({
-      data: {
-        token,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ error: `Internal server error` });
-  }
+  const parsedResponse: ArtistSearchResponse = await response.json();
+  const responseArtists = parsedResponse.artists.items;
+
+  res.json({ data: responseArtists })
+
 });
+
+
+app.get("/songs", async (req: Request, res: Response) => {
+  const { song_search_keyword, artist_name } = req.body.data
+  const token = await tokenManager.getToken();  
+
+  const params = new URLSearchParams({
+    query: `track:"${song_search_keyword}" artist:${artist_name}`,
+    type: `track`,
+    market: `US`,
+  });
+
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?${params}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    }
+  );
+
+  const parsedResponse = await response.json();
+  const trackResponse: TrackResponse = parsedResponse.tracks;
+
+  res.json({data: trackResponse})
+
+});
+
+
 
 app.get("/", (req: Request, res: Response) => {
-  
   res.send("Express + TypeScript Server");
-
 });
+
+
+app.use(NotFound)
+app.use(errorHandler)
 
 export default app;

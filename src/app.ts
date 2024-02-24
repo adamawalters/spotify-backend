@@ -1,7 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import Buffer from "buffer";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app: Express = express();
 

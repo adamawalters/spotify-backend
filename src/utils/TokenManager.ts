@@ -1,8 +1,6 @@
 import { Token, SpotifyAccessToken } from "./types";
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-//import Buffer from "buffer";
-
 
 export default class TokenManager {
     private static instance: TokenManager;

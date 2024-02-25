@@ -1,38 +1,38 @@
-import { TrackResponse, Song } from "./types";
+import { Song } from "./types";
 
-export function removeSongDuplicates(trackResponse: TrackResponse) {
+export function removeSongDuplicates(tracks: Song[]) {
 
-    const originalTracks: Song[] = trackResponse.items;
-    const isrcFilteredTracks: Song[] = [];
-    const nameFilteredTracks: Song[] = [];
-    const isrc_ids = new Set();
-    const song_names = new Set();
+    const uniqueStandardizedNames = new Set<string>();
+    const uniqueIsrcs = new Set<string>();
 
-    /*Filter based on isrc */
-    originalTracks.forEach((track) => {
-      if (!isrc_ids.has(track.external_ids.isrc)) {
-        isrc_ids.add(track.external_ids.isrc);
-        isrcFilteredTracks.push(track);
-      }
-    });
 
-    /*Filter based on exact name match */
-    isrcFilteredTracks.forEach((track) => {
+    const deduplicatedTracks = tracks.filter((song => {
       const additionalInfoRegex = /(?:\([^)]*\)|-).*$/;
-      const standardizedTrackName = track.name
+      const standardizedSongName = song.name
         .replace(additionalInfoRegex, "")
         .trim()
         .toLowerCase();
 
-      if (!song_names.has(standardizedTrackName)) {
-        song_names.add(standardizedTrackName);
-        nameFilteredTracks.push(track);
+      if(uniqueStandardizedNames.has(standardizedSongName)) {
+        return false;
+      } else {
+        uniqueStandardizedNames.add(standardizedSongName)
       }
-    });
 
-    nameFilteredTracks.sort((a, b) =>
-      a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-    );
-    
-    return nameFilteredTracks    
+
+      if(uniqueIsrcs.has(song.external_ids.isrc)) {
+        return false;
+      } else {
+        uniqueIsrcs.add(song.external_ids.isrc)
+      }
+
+      return true;
+
+    }))
+
+    deduplicatedTracks.sort((a, b) =>
+      a.name.localeCompare(b.name)
+  );
+
+    return deduplicatedTracks
 }

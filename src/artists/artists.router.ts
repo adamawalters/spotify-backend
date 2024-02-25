@@ -28,14 +28,15 @@ const bodyHasArtistProperties = (
   res: Response,
   next: NextFunction
 ) => {
-  const { artist_search_keyword } = req.body.data;
-  if (!artist_search_keyword) {
+  const { artist_search_keyword, offset } = req.body.data;
+  if (!artist_search_keyword || !offset) {
     return next({
       status: 400,
-      message: `Body must have 'artist_search_keyword' property`,
+      message: `Body must have 'artist_search_keyword' and 'offset' properties`,
     });
   }
   res.locals.artist_search_keyword = artist_search_keyword;
+  res.locals.offset = offset;
   next();
 };
 
@@ -45,7 +46,7 @@ router.get(
   bodyHasDataProperty,
   bodyHasArtistProperties,
   async (req: Request, res: Response) => {
-    const { artist_search_keyword } = res.locals;
+    const { artist_search_keyword, offset } = res.locals;
     const token = await tokenManager.getToken();
 
     const params = new URLSearchParams({
@@ -53,6 +54,7 @@ router.get(
       type: "artist",
       market: "US",
       limit: "10",
+      offset: offset,
     });
 
     const response = await fetch(

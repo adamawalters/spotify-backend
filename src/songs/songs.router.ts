@@ -33,6 +33,9 @@ const bodyHasSongProperties = (
       message: `Body must have 'song_search_keyword' and 'artist_name' properties`,
     });
   }
+  res.locals.song_search_keyword = song_search_keyword;
+  res.locals.artist_name = artist_name
+
   next();
 };
 
@@ -41,13 +44,14 @@ router.get(
   bodyHasDataProperty,
   bodyHasSongProperties,
   async (req: Request, res: Response) => {
-    const { song_search_keyword, artist_name } = req.body.data;
+    const { song_search_keyword, artist_name } = res.locals;
     const token = await tokenManager.getToken();
 
     const params = new URLSearchParams({
       query: `track:"${song_search_keyword}" artist:${artist_name}`,
       type: `track`,
       market: `US`,
+      limit: `50`,
     });
 
     const response = await fetch(
@@ -61,28 +65,26 @@ router.get(
 
     const parsedResponse = await response.json();
     const trackResponse: TrackResponse = parsedResponse.tracks;
+
     while (trackResponse.next) {
-       console.log(`url: ${trackResponse.next}`) 
       const currResponse = await fetch(trackResponse.next, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.value}`,
         },
       });
 
       const currParsedResponse = await currResponse.json();
       const currTrackResponse: TrackResponse = currParsedResponse.tracks;
 
-      if (currTrackResponse?.items) {
-        trackResponse.items.push(...currTrackResponse.items);
-      } else {
-        console.log(`empty? ${JSON.stringify(currTrackResponse)}`)
-      }
+      trackResponse.items.push(...currTrackResponse.items);
       trackResponse.next = currTrackResponse.next;
     }
 
-    const tracksNoDuplicates = removeSongDuplicates(trackResponse);
+    const tracksNoDuplicates = removeSongDuplicates(trackResponse.items);
 
-    res.json({ data: tracksNoDuplicates });
+    res.json({
+      data: { numTracks: tracksNoDuplicates.length, tracks: tracksNoDuplicates },
+    });
   }
 );
 

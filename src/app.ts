@@ -4,9 +4,11 @@ import { errorHandler } from "./errors/errorHandler";
 import { NotFound } from "./errors/notFound";
 import SongRouter from "./songs/songs.router"
 import ArtistRouter from "./artists/artists.router"
+import cors from "cors";
 
 /* Body parser */
 app.use(express.json())
+app.use(cors())
 
 
 app.use("/artists", ArtistRouter)

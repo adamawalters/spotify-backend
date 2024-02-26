@@ -8,31 +8,17 @@ const router: Router = express.Router();
 
 // Define a middleware function
 
-const bodyHasDataProperty = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { data } = req.body;
-  if (!data) {
-    return next({
-      status: 400,
-      message: `Body must have 'data' property`,
-    });
-  }
-  next();
-};
 
-const bodyHasArtistProperties = (
+const queryHasArtistProperties = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { artist_search_keyword, offset } = req.body.data;
-  if (!artist_search_keyword || !offset) {
+  const { artist_search_keyword, offset } = req.query;
+  if (!artist_search_keyword /*|| typeof offset !== "number"*/) {
     return next({
       status: 400,
-      message: `Body must have 'artist_search_keyword' and 'offset' properties`,
+      message: `query must have 'artist_search_keyword' and 'offset' (as a number) properties`,
     });
   }
   res.locals.artist_search_keyword = artist_search_keyword;
@@ -43,8 +29,7 @@ const bodyHasArtistProperties = (
 // Use the middleware function for a specific route
 router.get(
   "/",
-  bodyHasDataProperty,
-  bodyHasArtistProperties,
+  queryHasArtistProperties,
   async (req: Request, res: Response) => {
     const { artist_search_keyword, offset } = res.locals;
     const token = await tokenManager.getToken();
@@ -69,7 +54,12 @@ router.get(
     const parsedResponse: ArtistSearchResponse = await response.json();
     const responseArtists = parsedResponse.artists.items;
 
-    res.json({ data: responseArtists });
+    res.json({
+      data: {
+        totalArtists: parsedResponse.artists.total,
+        artists: responseArtists,
+      },
+    });
   }
 );
 

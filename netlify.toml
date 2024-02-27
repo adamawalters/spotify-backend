@@ -4,3 +4,10 @@
   node_bundler = "esbuild"
 [build]
   command = "echo 'default context'"
+[[redirects]]
+  force = true
+  from = "/*"
+  status = 200
+  to = "/.netlify/functions/api/:splat"
+
+

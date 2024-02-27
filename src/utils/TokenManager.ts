@@ -41,6 +41,7 @@ export default class TokenManager {
             await this.refreshToken()
         }
         /* Token will be defined since we're refreshing beforehand */
+        console.log(`token returned from getToken() : ${this.token}`)
         return this.token!;
     }
 
@@ -75,7 +76,7 @@ export default class TokenManager {
         
             const token: SpotifyAccessToken = data; 
             TokenManager.getInstance().setToken(token.access_token, new Date(Date.now() + token.expires_in * 1000));    
-            console.log(`token refreshed`)        
+            console.log(`token refreshed - its value is ${token.access_token}`)        
         
           } catch (error) {
             if(error instanceof Error) {

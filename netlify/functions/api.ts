@@ -6,7 +6,7 @@ const api = express();
 
 api.use(cors())
 const router = Router();
-router.get("/hello", (req, res) => res.send("Hello World!"));
+router.get("/hello", (req, res) => res.send("Hello World outside!"));
 
 api.use("/api/", router);
 

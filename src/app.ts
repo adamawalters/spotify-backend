@@ -5,6 +5,7 @@ import { NotFound } from "./errors/notFound";
 import SongRouter from "./songs/songs.router"
 import ArtistRouter from "./artists/artists.router"
 import cors from "cors";
+import serverless from "serverless-http"
 
 /* Body parser */
 app.use(express.json())
@@ -23,4 +24,5 @@ app.get("/", (req: Request, res: Response) => {
 app.use(NotFound)
 app.use(errorHandler)
 
+export const handler = serverless(app)
 export default app;

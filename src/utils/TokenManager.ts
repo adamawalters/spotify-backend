@@ -15,7 +15,7 @@ export default class TokenManager {
             TokenManager.instance = new TokenManager();
         }
         return TokenManager.instance;
-    }
+    } 
 
     /* Checks if token is valid every hour */
     private startTokenRefreshInterval(): void {

@@ -8,6 +8,6 @@
   force = true
   from = "/*"
   status = 200
-  to = "/:splat"
+  to = "/src/app/:splat"
 
 

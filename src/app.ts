@@ -24,7 +24,7 @@ app.get("/", (_req: Request, res: Response) => {
 
 
 app.use(NotFound)
-app.use(errorHandler)
+app.use(errorHandler) 
 
 export const handler = serverless(app)
 export default app;

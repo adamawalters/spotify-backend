@@ -3,16 +3,21 @@ import mongoose from "./../connection";
 import data from "./seedQueries.json";
 import QueryModel from "../models/QueryModel";
 
+
+
+
+await startSeed();
+mongoose.connection.close();
+
+
+
 async function deleteQueries() { 
     //delete all queries from the database
     try {
         console.log(await QueryModel.deleteMany({}));
-        await seedQueries();
     } catch (error) {
         console.error("Error deleting queries", error);
-    } finally {
-        mongoose.connection.close();
-    }
+  }
 }
 
 async function seedQueries() {  
@@ -28,7 +33,11 @@ async function seedQueries() {
   console.log("Queries seeded successfully");
 }
 
-deleteQueries();
+
+async function startSeed() {
+  await deleteQueries();
+  await seedQueries();
+}
 
 
 

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
-const url = /* process.env.MONGO_URL || */ "mongodb://localhost:27017/test";
+const url = /* process.env.MONGO_URL || */ "mongodb://localhost:27017/test_db";
 
-export async function connectToMongoDB() {
+export async function connectToMongoDB() {  
     try {
         await mongoose.connect(url);
         console.log('MongoDB connected');

@@ -1,6 +1,7 @@
 import QueryModel from "../db/models/QueryModel";
 import { Query } from "../utils/types";
 
+
 async function list(limit: number = 0) {
   return await QueryModel.find().sort({ created_at: -1 }).limit(limit);
 }

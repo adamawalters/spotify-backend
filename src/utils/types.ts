@@ -69,7 +69,6 @@ export interface ArtistSearchResponse {
 export interface Query { 
     search_keyword: string,
     artist_name: string,
-    date_performed: Date,
     num_songs: number
 }
 

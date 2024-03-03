@@ -18,7 +18,7 @@ app.use("/songs", SongRouter)
 app.use("/queries", QueriesRouter)
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 

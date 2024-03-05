@@ -16,7 +16,7 @@ async function list(req: Request, res: Response, next: NextFunction) {
 async function post (req: Request, res: Response) {
     const { search_keyword, artist_name, num_songs } = req.body.data as Query;
     res.json({ data: await service.post({ search_keyword, artist_name, num_songs }) });
-  }
+  } 
 
  export default {
     list: asyncHandler(list),

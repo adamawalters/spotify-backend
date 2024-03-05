@@ -22,8 +22,8 @@ const querySchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-});
+}, {capped: {size: 1024, max: 100}});
 
-const model = mongoose.model("Query", querySchema);
+const model = mongoose.model("recentQuery", querySchema);
 
 export default model;

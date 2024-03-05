@@ -24,6 +24,9 @@ const querySchema = new mongoose.Schema({
   },
 }, {capped: {size: 1024, max: 100}});
 
+// Create a model for the query schema - this automatically creates a collection named "recentQueries" in the database
+// The collection is capped at 1024 bytes and can store a maximum of 100 documents
+
 const model = mongoose.model("recentQuery", querySchema);
 
 export default model;

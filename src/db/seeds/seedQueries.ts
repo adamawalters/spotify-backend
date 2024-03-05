@@ -10,7 +10,9 @@ async function deleteQueries() {
         await seedQueries();
     } catch (error) {
         console.error("Error deleting queries", error);
-  }
+    } finally {
+        mongoose.connection.close();
+    }
 }
 
 async function seedQueries() {  
@@ -26,11 +28,7 @@ async function seedQueries() {
   console.log("Queries seeded successfully");
 }
 
-
-async function startSeed() {
-  await deleteQueries();
-  await seedQueries();
-}
+deleteQueries();
 
 
 

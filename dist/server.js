@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app_1 = __importDefault(require("./app"));
+//import { connectToMongoDB } from  "./db/connection";
 const port = process.env.PORT || 5001;
 app_1.default.listen(port, () => {
-    console.log(`[server]: Server listening on port ${port}!`);
+    console.log(`Server is running on port ${port}`);
 });

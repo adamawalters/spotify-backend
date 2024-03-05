@@ -41,6 +41,7 @@ router.get("/", queryHasArtistProperties, (req, res) => __awaiter(void 0, void 0
         limit: "10",
         offset: offset,
     });
+    console.log(`Token.value right before request is ${token.value}`);
     const response = yield fetch(`https://api.spotify.com/v1/search?${params}`, {
         headers: {
             Authorization: `Bearer ${token.value}`,

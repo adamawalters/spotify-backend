@@ -15,6 +15,10 @@ This is an Express.js server, currently deployed on [Adaptable](https://spotify-
 1. Requires url parameters of artist name, for example, `songs?song_search_keyword=Love&artist_name=C%C3%A9line+Dion`
 2. Will return an object containing a "data" property. This "data" property is an object and the "tracks" property of this object contains an array of songs. The "totalTracks" property contains the total number of songs for the query. 
 
-  
+### GET "/queries": 
+1. Requires url parameters of artist name, for example, `queries?limit=3`. The limit is optional and if left out will return all recent queries. 
+2. Will return an object containing a "data" property. This "data" property is an array of objects that represent a search query, with properties  `search_keyword`, `artist_name`, `num_songs`, and `created_at`.   
 
-
+### POST "/queries":
+1. Requires body to be an object with a "data" property. This "data" property is an object with the properties `search_keyword`, `artist_name`, and `num_songs`
+2. Will return an object containing a "data" property. This "data" property is an array of objects that represent a search query, with properties  `search_keyword`, `artist_name`, `num_songs`, and `created_at`. 

@@ -2,6 +2,10 @@
 
 The TuneTrail app [front-end link](https://github.com/adamawalters/artist-song-keyword-searcher/) explains the purpose of the project & how it works
 
+## Summary
+
+The backend authenticates to the Spotify API, and automatically refreshes the token every hour. It makes the calls to the Spotify API and returns relevant data to the front-end. It also processes the list of songs that are returned by the Spotify API, de-duplicating them based on the ISRC id as well as the beginning of the song name. 
+
 ## Tech stack
 
 This is an Express.js server, currently deployed on [Adaptable](https://spotify-backend.adaptable.app). It contains validation of query parameters, error handling, and not found routes. 

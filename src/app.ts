@@ -20,7 +20,7 @@ app.use("/queries", QueriesRouter)
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
-});
+}); 
 
 
 app.use(NotFound)

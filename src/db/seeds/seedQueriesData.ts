@@ -1,5 +1,4 @@
-{
-    "queries": [
+ export default [
         {
             "search_keyword": "Love",
             "artist_name": "Taylor Swift",
@@ -101,4 +100,4 @@
             "num_songs": 19
         }
     ]
-}
+

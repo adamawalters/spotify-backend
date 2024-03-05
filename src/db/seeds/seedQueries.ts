@@ -1,6 +1,6 @@
 import { Query } from "../../utils/types";
 import mongoose from "./../connection";
-import data from "./seedQueries.json";
+import data from "./seedQueriesData";
 import QueryModel from "../models/QueryModel";
 
 async function deleteQueries() { 
@@ -17,7 +17,7 @@ async function deleteQueries() {
 
 async function seedQueries() {  
   //create model for each query in the seedQueries.json file and save it to the database
-  const allQueries = data.queries.map(async (query: Query) => {
+  const allQueries = data.map(async (query: Query) => {
     const { search_keyword, artist_name, num_songs } = query;
     const queryModel = new QueryModel({ search_keyword, artist_name, num_songs });
     await queryModel.save();

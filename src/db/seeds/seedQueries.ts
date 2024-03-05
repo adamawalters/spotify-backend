@@ -3,17 +3,16 @@ import mongoose from "./../connection";
 import data from "./seedQueriesData";
 import RecentQuery from "../models/RecentQuery";
 
-
-startSeed().then(() => mongoose.connection.close())
-
-
 async function deleteQueries() { 
     //delete all queries from the database
     try {
         console.log(await RecentQuery.deleteMany({}));
+        await seedQueries();
     } catch (error) {
         console.error("Error deleting queries", error);
-  }
+    } finally {
+        mongoose.connection.close();
+    }
 }
 
 async function seedQueries() {  
@@ -29,11 +28,7 @@ async function seedQueries() {
   console.log("Queries seeded successfully");
 }
 
-
-async function startSeed() {
-  await deleteQueries();
-  await seedQueries();
-}
+deleteQueries();
 
 
 

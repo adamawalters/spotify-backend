@@ -4,7 +4,7 @@ import { errorHandler } from "./errors/errorHandler";
 import { NotFound } from "./errors/notFound";
 import SongRouter from "./songs/songs.router"
 import ArtistRouter from "./artists/artists.router"
-import QueriesRouter from "./queries/queries.router"
+//import QueriesRouter from "./queries/queries.router"
 import cors from "cors";
 import serverless from "serverless-http"
 
@@ -15,7 +15,7 @@ app.use(cors())
 
 app.use("/artists", ArtistRouter)
 app.use("/songs", SongRouter)
-app.use("/queries", QueriesRouter)
+//app.use("/queries", QueriesRouter)
 
 
 app.get("/", (_req: Request, res: Response) => {

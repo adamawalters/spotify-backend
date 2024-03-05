@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 let url : string;
 
 if(process.env.NODE_ENV === 'production') {
-    url = process.env.MONGO_URL!;
+    url = process.env.MONGO_URL as string;
 } else {
     url = "mongodb://localhost:27017/test"
 }

@@ -4,7 +4,7 @@ The TuneTrail app [front-end link](https://github.com/adamawalters/artist-song-k
 
 ## Tech stack
 
-This is an Express.js server, currently deployed on [Adaptable]([https://spotify-backend-express.netlify.app/](https://spotify-backend.adaptable.app)). It contains validation of query parameters, error handling, and not found routes. 
+This is an Express.js server, currently deployed on [Adaptable](https://spotify-backend-express.netlify.app/](https://spotify-backend.adaptable.app). It contains validation of query parameters, error handling, and not found routes. 
 
 ## Endpoints
 ### GET "/artists": 

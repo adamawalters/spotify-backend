@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 
-const url = /* process.env.MONGO_URL || */ "mongodb://localhost:27017/test_db";
+let url : string;
+
+if(process.env.NODE_ENV === 'production') {
+    url = process.env.MONGO_URL!;
+} else {
+    url = "mongodb://localhost:27017/test"
+}
+
 
 export async function connectToMongoDB() {  
     try {

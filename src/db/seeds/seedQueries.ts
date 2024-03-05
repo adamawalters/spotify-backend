@@ -3,14 +3,11 @@ import mongoose from "./../connection";
 import data from "./seedQueriesData";
 import RecentQuery from "../models/RecentQuery";
 
-
-startSeed().then(() => mongoose.connection.close())
-
-
 async function deleteQueries() { 
     //delete all queries from the database
     try {
         console.log(await RecentQuery.deleteMany({}));
+        await seedQueries();
     } catch (error) {
         console.error("Error deleting queries", error);
   }

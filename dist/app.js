@@ -10,6 +10,7 @@ const errorHandler_1 = require("./errors/errorHandler");
 const notFound_1 = require("./errors/notFound");
 const songs_router_1 = __importDefault(require("./songs/songs.router"));
 const artists_router_1 = __importDefault(require("./artists/artists.router"));
+//import QueriesRouter from "./queries/queries.router"
 const cors_1 = __importDefault(require("cors"));
 const serverless_http_1 = __importDefault(require("serverless-http"));
 /* Body parser */
@@ -17,7 +18,8 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use("/artists", artists_router_1.default);
 app.use("/songs", songs_router_1.default);
-app.get("/", (req, res) => {
+//app.use("/queries", QueriesRouter)
+app.get("/", (_req, res) => {
     res.send("Express + TypeScript Server");
 });
 app.use(notFound_1.NotFound);

@@ -1,6 +1,7 @@
 import RecentQuery from "../db/models/RecentQuery";
 import { Query } from "../utils/types";
 
+
 async function list(limit: number = 0) {
   return await RecentQuery.find().sort({ created_at: -1 }).limit(limit);
 }

@@ -3,6 +3,7 @@ import service from "./queries.service";
 import asyncHandler from "../errors/asyncHandler";
 import { Query } from "../utils/types";
 
+
 async function list(req: Request, res: Response, next: NextFunction) {
     const { limit = 0 } = req.query;
         if(isNaN(Number(limit))) { 

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+
 let url : string;
 
 if(process.env.NODE_ENV === 'production') {
@@ -9,7 +10,7 @@ if(process.env.NODE_ENV === 'production') {
 }
 
 
-export async function connectToMongoDB() {
+export async function connectToMongoDB() {  
     try {
         await mongoose.connect(url);
         console.log('MongoDB connected');

@@ -8,7 +8,6 @@ if(process.env.NODE_ENV === 'production') {
     url = "mongodb://localhost:27017/test"
 }
 
-
 export async function connectToMongoDB() {
     try {
         await mongoose.connect(url);
@@ -19,6 +18,6 @@ export async function connectToMongoDB() {
     }
 }
 
-connectToMongoDB();
+//connectToMongoDB();
 
 export default mongoose;

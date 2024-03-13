@@ -1,3 +1,5 @@
+import { ValidationError } from "express-validator";
+
 export interface Token {
     value: string;
     expiration: Date;
@@ -12,6 +14,7 @@ export interface SpotifyAccessToken {
 export interface CustomError {
     status: number,
     message: string
+    errors?: Array<ValidationError> 
 }
 
 

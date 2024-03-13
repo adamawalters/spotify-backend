@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import TokenManager from "../utils/TokenManager";
 const tokenManager = TokenManager.getInstance();
 import { ArtistSearchResponse } from "../utils/types";
+import  asyncHandler from "../errors/asyncHandler";
+import { query, validationResult } from "express-validator";
 
 
 async function get(req: Request, res: Response) {
@@ -38,23 +40,31 @@ async function get(req: Request, res: Response) {
   }
 
 
-const queryHasArtistProperties = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const { artist_search_keyword, offset } = req.query;
-    if (!artist_search_keyword /*|| typeof offset !== "number"*/) {
+  const validateQueryHasArtistProperties = [ 
+    query('artist_search_keyword').exists().withMessage('artist_search_keyword is required'),
+    query('offset').exists().withMessage('offset is required').isNumeric().withMessage('offset must be a number'),
+  ];
+
+
+  const handleQueryValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
       return next({
         status: 400,
-        message: `query must have 'artist_search_keyword' and 'offset' (as a number) properties`,
+        message: `Validation error`,
+        errors: errors.array(),
       });
     }
-    res.locals.artist_search_keyword = artist_search_keyword;
-    res.locals.offset = offset;
+    // If no errors, then set the properties on res.locals from the query
+    for(const key in req.query) { 
+      res.locals[key] = req.query[key]
+    }
+
     next();
   };
 
+
+
   export default {
-    get: [queryHasArtistProperties, get]
+    get: [...validateQueryHasArtistProperties, handleQueryValidationErrors, asyncHandler(get)]
   }

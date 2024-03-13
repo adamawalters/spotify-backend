@@ -1,28 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import TokenManager from '../utils/TokenManager';
 import { TrackResponse } from '../utils/types';
-import { removeSongDuplicates } from '../utils/utilities';
+import { fetchAllSongs, removeSongDuplicates } from '../utils/utilities';
 const tokenManager = TokenManager.getInstance();
 import asyncHandler from '../errors/asyncHandler';
+import {query, validationResult} from 'express-validator';
 
 
-const queryHasSongProperties = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const { song_search_keyword, artist_name } = req.query;
-    if (!song_search_keyword || !artist_name) {
-      return next({
-        status: 400,
-        message: `Query must have 'song_search_keyword' and 'artist_name' properties`,
-      });
-    }
-    res.locals.song_search_keyword = song_search_keyword;
-    res.locals.artist_name = artist_name;
-  
-    next();
-  };
 
   async function get(req: Request, res: Response) {
     const { song_search_keyword, artist_name } = res.locals;
@@ -46,22 +30,8 @@ const queryHasSongProperties = (
 
     const parsedResponse = await response.json();
     const trackResponse: TrackResponse = parsedResponse.tracks;
-
-    while (trackResponse.next) {
-      const currResponse = await fetch(trackResponse.next, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
-
-      const currParsedResponse = await currResponse.json();
-      const currTrackResponse: TrackResponse = currParsedResponse.tracks;
-
-      trackResponse.items.push(...currTrackResponse.items);
-      trackResponse.next = currTrackResponse.next;
-    }
-
-    const tracksNoDuplicates = removeSongDuplicates(trackResponse.items);
+    const trackResponseWithAllTracks = await fetchAllSongs(trackResponse)
+    const tracksNoDuplicates = removeSongDuplicates(trackResponseWithAllTracks.items);
 
     res.json({
       data: {
@@ -72,6 +42,31 @@ const queryHasSongProperties = (
   }
 
 
+  // Checking if properties are present in the query. To check in general through params, body, and query, use check() instead of query()
+  const validateQueryHasSongProperties = [
+    query(`song_search_keyword`).exists().withMessage(`song_search_keyword is required`),
+    query(`artist_name`).exists().withMessage(`artist_name is required`),
+  ]
+
+  const handleQueryValidationErrors = (req: Request, res: Response, next: NextFunction) => { 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next({
+        status: 400,
+        message: `Validation error`,
+        errors: errors.array(),
+      });
+    }
+    // If no errors, then set the properties on res.locals from the query
+    for (const key in req.query) {
+      res.locals[key] = req.query[key];
+    }
+
+    next();
+  }
+
+
+
   export default {
-    get: [queryHasSongProperties, asyncHandler(get)]
+    get: [...validateQueryHasSongProperties, handleQueryValidationErrors, asyncHandler(get)]
   }

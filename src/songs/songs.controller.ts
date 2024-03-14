@@ -44,8 +44,8 @@ import {query, validationResult} from 'express-validator';
 
   // Checking if properties are present in the query. To check in general through params, body, and query, use check() instead of query()
   const validateQueryHasSongProperties = [
-    query(`song_search_keyword`).exists().withMessage(`song_search_keyword is required`),
-    query(`artist_name`).exists().withMessage(`artist_name is required`),
+    query(`song_search_keyword`).exists().notEmpty().withMessage(`song_search_keyword is required`),
+    query(`artist_name`).exists().notEmpty().withMessage(`artist_name is required`),
   ]
 
   const handleQueryValidationErrors = (req: Request, res: Response, next: NextFunction) => { 
@@ -53,8 +53,7 @@ import {query, validationResult} from 'express-validator';
     if (!errors.isEmpty()) {
       return next({
         status: 400,
-        message: `Validation error`,
-        errors: errors.array(),
+        message: `Validation errors: ${errors.array().map((error) => error.msg).join(", ")}`,
       });
     }
     // If no errors, then set the properties on res.locals from the query

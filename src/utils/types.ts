@@ -14,7 +14,6 @@ export interface SpotifyAccessToken {
 export interface CustomError {
     status: number,
     message: string
-    errors?: Array<ValidationError> 
 }
 
 

@@ -41,8 +41,8 @@ async function get(req: Request, res: Response) {
 
 
   const validateQueryHasArtistProperties = [ 
-    query('artist_search_keyword').exists().withMessage('artist_search_keyword is required'),
-    query('offset').exists().withMessage('offset is required').isNumeric().withMessage('offset must be a number'),
+    query('artist_search_keyword').exists().notEmpty().withMessage('artist_search_keyword is required'),
+    query('offset').exists().notEmpty().withMessage('offset is required').isNumeric().withMessage('offset must be a number'),
   ];
 
 
@@ -51,8 +51,7 @@ async function get(req: Request, res: Response) {
     if (!errors.isEmpty()) {
       return next({
         status: 400,
-        message: `Validation error`,
-        errors: errors.array(),
+        message: `Validation errors: ${errors.array().map((error) => error.msg).join(", ")}`,
       });
     }
     // If no errors, then set the properties on res.locals from the query

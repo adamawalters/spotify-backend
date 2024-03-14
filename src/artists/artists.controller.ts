@@ -9,7 +9,9 @@ import { query, validationResult } from "express-validator";
 
 async function get(req: Request, res: Response) {
     const { artist_search_keyword, offset } = res.locals;
+    console.log(`before getting token`)
     const token = await tokenManager.getToken();
+    console.log(`token is ${token.value}`)
 
     const params = new URLSearchParams({
       q: artist_search_keyword,

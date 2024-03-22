@@ -17,7 +17,7 @@ async function post (req: Request, res: Response) {
   } 
 
 const listValidations = [
-    query('limit').optional().isNumeric().toInt().withMessage('limit must be a number'),
+    query('limit').optional().isNumeric().withMessage('limit must be a number').toInt(),
 ];
 
 const postValidations = [

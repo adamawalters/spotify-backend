@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import TokenManager from '../utils/TokenManager';
 import { TrackResponse } from '../utils/types';
 import { fetchAllSongs, removeSongDuplicates } from '../utils/utilities';

@@ -71,7 +71,8 @@ export interface ArtistSearchResponse {
 export interface Query { 
     search_keyword: string,
     artist_name: string,
-    num_songs: number
+    num_songs: number,
+    spotify_id?: string
 }
 
 

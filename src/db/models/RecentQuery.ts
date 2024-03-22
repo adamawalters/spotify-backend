@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const querySchema = new mongoose.Schema({
+  spotify_id: {
+    type: String,
+    required: false,
+    minLength: 1,
+  },
   search_keyword: {
     type: String,
     required: true,
@@ -22,8 +27,11 @@ const querySchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-}, {capped: {size: 1024, max: 100}});
+}, 
+{capped: {size: 1024 * 1024 * 1024, max: 100}}
+);
 
+//creates a collection (table) called "recentQuery" in the database
 const model = mongoose.model("recentQuery", querySchema);
 
 export default model;

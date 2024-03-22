@@ -1,4 +1,7 @@
- export default [
+
+
+
+export default [
         {
             "search_keyword": "Love",
             "artist_name": "Taylor Swift",
@@ -98,6 +101,12 @@
             "search_keyword": "Thunder",
             "artist_name": "Imagine Dragons",
             "num_songs": 19
+        },
+        {
+            "spotify_id": process.env.SPOTIFY_ID,
+            "search_keyword": "Happier",
+            "artist_name": "Marshmello",
+            "num_songs": 14
         }
     ]
 

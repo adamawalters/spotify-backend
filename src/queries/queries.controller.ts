@@ -35,6 +35,11 @@ const listValidations = [
     .isNumeric()
     .withMessage("limit must be a number")
     .toInt(),
+  query("spotify_id")
+    .optional()
+    .isNumeric()
+    .withMessage("spotify_id must be a number")
+    .toInt(),
 ];
 
 const postValidations = [

@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import service from "./queries.service";
 import asyncHandler from "../errors/asyncHandler";
 import { Query } from "../utils/types";
-import { query, body, validationResult } from "express-validator";
+import { query, body, param, validationResult } from "express-validator";
 
 async function list(req: Request, res: Response) {
   const { limit = 0 } = res.locals;
-  const { spotify_id } = res.locals;
+  const { spotify_id } = res.locals as { spotify_id: number };
   if (spotify_id) {
     const queries = await service.listUserQueries(limit, spotify_id);
     return res.json({ data: queries });
@@ -27,6 +27,13 @@ async function post(req: Request, res: Response) {
   res.json({
     data: await service.postPublic({ search_keyword, artist_name, num_songs }),
   });
+}
+
+async function deleteUserQuery(req: Request, res: Response) {
+  const { queryId } = res.locals
+  const response = await service.delete(queryId)
+  console.log(`response: ${JSON.stringify(response)}`)
+  res.sendStatus(204)
 }
 
 const listValidations = [
@@ -64,6 +71,13 @@ const postValidations = [
     .withMessage("num_songs must be a number"),
 ];
 
+const deleteValidations = [
+  param("queryId")
+    .exists()
+    .withMessage("queryId is required in route parameter")
+    .custom(service.queryExists)
+]
+
 const handleQueryValidationErrors = (
   req: Request,
   res: Response,
@@ -82,6 +96,29 @@ const handleQueryValidationErrors = (
   // If no errors, then set the properties on res.locals from the query
   for (const key in req.query) {
     res.locals[key] = req.query[key];
+  }
+
+  next();
+};
+
+const handleParamsValidationErrors = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next({
+      status: 400,
+      message: `Validation errors: ${errors
+        .array()
+        .map((error) => error.msg)
+        .join(", ")}`,
+    });
+  }
+  // If no errors, then set the properties on res.locals from the query
+  for (const key in req.params) {
+    res.locals[key] = req.params[key];
   }
 
   next();
@@ -110,7 +147,9 @@ const handleBodyValidationErrors = (
   next();
 };
 
+
 export default {
   list: [...listValidations, handleQueryValidationErrors, asyncHandler(list)],
   post: [...postValidations, handleBodyValidationErrors, asyncHandler(post)],
+  delete: [...deleteValidations, handleParamsValidationErrors, asyncHandler(deleteUserQuery)]
 };

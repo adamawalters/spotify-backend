@@ -9,5 +9,7 @@ router.route("/")
     .post(controller.post)
 
             
+router.route("/:queryId")
+    .delete(controller.delete)
 
 export default router;

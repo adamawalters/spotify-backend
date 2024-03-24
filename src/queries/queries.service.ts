@@ -26,9 +26,26 @@ async function postUserQuery(query: Required<Query>) {
   return await recentQuery.save();
 }
 
+//used in custom validator on controller to check if query exists - if not, throws error
+async function queryExists(queryId: string){
+
+  const query = await RecentQuery.findOne({_id: queryId});
+ 
+  if(query) {
+    return true;
+  }
+  throw new Error("queryId not found")
+}
+
+async function deleteUserQuery(queryId: string){
+  return await RecentQuery.deleteOne({_id: queryId})  
+}
+
 export default {
+  queryExists,
   listUserQueries,
   listPublicQueries,
   postPublic,
   postUserQuery,
+  delete: deleteUserQuery
 };

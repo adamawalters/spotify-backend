@@ -11,7 +11,8 @@ async function listPublicQueries(limit: number = 0) {
 async function listUserQueries(limit: number = 0, spotify_id: number) { 
   return await RecentQuery.find({spotify_id: spotify_id})
     .sort({ created_at: -1 })
-    .limit(limit);
+    .limit(limit)
+    .populate("tags");
 }
 
 async function postPublic(query: Query) {

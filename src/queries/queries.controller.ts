@@ -50,16 +50,16 @@ const listValidations = [
 ];
 
 const postValidations = [
-  body("spotify_id")
-  .optional()
-  .isNumeric()
-  .withMessage("spotify_id must be a number")
-  .toInt(),
   body("data")
     .exists()
     .withMessage("data is required")
     .isObject()
     .withMessage("data must be an object"),
+  body("data.spotify_id")
+    .optional()
+    .isNumeric()
+    .withMessage("spotify_id must be a number")
+    .toInt(),
   body("data.search_keyword")
     .exists()
     .withMessage("search_keyword is required"),

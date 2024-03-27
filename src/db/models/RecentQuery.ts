@@ -31,7 +31,7 @@ const querySchema = new mongoose.Schema({
 {capped: {size: 1024 * 1024 * 1024, max: 100}}
 );
 
-//creates a collection (table) called "recentQuery" in the database
+//creates a collection (table) called "recentQueries" in the database
 const model = mongoose.model("recentQuery", querySchema);
 
 export default model;

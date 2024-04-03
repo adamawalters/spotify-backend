@@ -7,7 +7,6 @@ export default class TokenManager {
     private token: Token | null = null;
 
     private constructor() {
-        this.startTokenRefreshInterval()
     }
 
     public static getInstance(): TokenManager {
@@ -16,21 +15,7 @@ export default class TokenManager {
         }
         return TokenManager.instance;
     } 
-
-    /* Checks if token is valid every hour */
-    private startTokenRefreshInterval(): void {
-        setInterval(async () => {
-            if(!this.isTokenValid()) {
-              try {
-                await this.refreshToken();      
-              } catch (error) {
-                if(error instanceof Error) {
-                  console.log(`Error in refreshing token: ${error.message}`); 
-                }
-              }
-            }
-          }, 1000 * 60 * 60); 
-    } 
+ 
 
     public setToken(value: string, expiration: Date): void {
         this.token = { value, expiration };

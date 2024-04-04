@@ -1,3 +1,5 @@
+import { ValidationError } from "express-validator";
+
 export interface Token {
     value: string;
     expiration: Date;
@@ -69,7 +71,8 @@ export interface ArtistSearchResponse {
 export interface Query { 
     search_keyword: string,
     artist_name: string,
-    num_songs: number
+    num_songs: number,
+    spotify_id?: string
 }
 
 

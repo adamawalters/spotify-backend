@@ -7,6 +7,7 @@ import ArtistRouter from "./artists/artists.router"
 import QueriesRouter from "./queries/queries.router"
 import cors from "cors";
 import serverless from "serverless-http"
+import TagsRouter from "./tags/tags.router"
 
 /* Body parser */
 app.use(express.json())
@@ -16,6 +17,7 @@ app.use(cors())
 app.use("/artists", ArtistRouter)
 app.use("/songs", SongRouter)
 app.use("/queries", QueriesRouter)
+app.use("/tags", TagsRouter)
 
 
 app.get("/", (_req: Request, res: Response) => {

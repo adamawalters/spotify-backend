@@ -7,7 +7,6 @@ export default class TokenManager {
     private token: Token | null = null;
 
     private constructor() {
-        this.startTokenRefreshInterval()
     }
 
     public static getInstance(): TokenManager {
@@ -16,21 +15,7 @@ export default class TokenManager {
         }
         return TokenManager.instance;
     } 
-
-    /* Checks if token is valid every hour */
-    private startTokenRefreshInterval(): void {
-        setInterval(async () => {
-            if(!this.isTokenValid()) {
-              try {
-                await this.refreshToken();      
-              } catch (error) {
-                if(error instanceof Error) {
-                  console.log(`Error in refreshing token: ${error.message}`); 
-                }
-              }
-            }
-          }, 1000 * 60 * 60); 
-    } 
+ 
 
     public setToken(value: string, expiration: Date): void {
         this.token = { value, expiration };
@@ -41,7 +26,6 @@ export default class TokenManager {
             await this.refreshToken()
         }
         /* Token will be defined since we're refreshing beforehand */
-        console.log(`token returned from getToken() : ${this.token}`)
         return this.token!;
     }
 
@@ -65,13 +49,13 @@ export default class TokenManager {
             });
         
             const data = await response.json();
-        
+            
             if (data.error) {
-              throw new Error(`Failed to fetch access token: ${data.error}}`);
+              throw new Error(`Failed to fetch access token: ${data.error}}. Contact support.`);
             }
 
             if (!('access_token' in data) || !('expires_in' in data)) {
-                throw new Error('Invalid response data received, not in format of Spotify Access Token');
+                throw new Error('Issue with properties in Spotify Access Token. Contact support.');
             }
         
             const token: SpotifyAccessToken = data; 
@@ -80,7 +64,7 @@ export default class TokenManager {
         
           } catch (error) {
             if(error instanceof Error) {
-                throw new Error(`Error in request to access token: ${error.message}`)
+                throw error;
             }
           }
     }

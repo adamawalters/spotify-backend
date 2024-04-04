@@ -5,6 +5,7 @@ import { connectToMongoDB } from  "./db/connection";
 
 const port = process.env.PORT || 5001;
 
+
 async function startServer() {
     try {
         await connectToMongoDB();

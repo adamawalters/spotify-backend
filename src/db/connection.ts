@@ -1,13 +1,17 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+const address = `${__dirname}/../../.env`;
+dotenv.config({ path: address });
 
 let url : string;
+
 
 if(process.env.NODE_ENV === 'production') {
     url = process.env.MONGO_URL as string;
 } else {
     url = "mongodb://localhost:27017/test"
 }
-
 
 export async function connectToMongoDB() {
     try {
@@ -19,6 +23,6 @@ export async function connectToMongoDB() {
     }
 }
 
-connectToMongoDB();
+//connectToMongoDB();
 
 export default mongoose;

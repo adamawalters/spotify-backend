@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
+import Tag from "./TagModel";
 
 const querySchema = new mongoose.Schema({
+  spotify_id: {
+    type: String,
+    required: false,
+    minLength: 1,
+  },
   search_keyword: {
     type: String,
     required: true,
@@ -22,8 +28,16 @@ const querySchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-}, {capped: {size: 1024, max: 100}});
+  tags: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
+    ref: `tag`,
+    default: [],
+  },
+}, 
+);
 
+//creates a collection (table) called "recentQueries" in the database
 const model = mongoose.model("recentQuery", querySchema);
 
 export default model;

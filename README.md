@@ -42,3 +42,6 @@ This is an Express.js server, currently deployed on [Adaptable](https://spotify-
 2. Requires body to be an object with a "data" property. This "data" property is an object with the property `tag_content`.
 3. Will return an object with a data property containing the properties "_id", "tag_content", and "query_id".
 
+### DELETE "/tags/:tagId":
+1. Requires tagId to be present in the route parameter.
+2. Will return a status of `204 No Content` if delete is successful.

@@ -10,7 +10,7 @@ The backend stores recent user queries to a MongoDB database via the Mongoose li
 
 ## Tech stack
 
-This is an Express.js server, currently deployed on [Adaptable](https://spotify-backend.adaptable.app). It contains validation of query parameters, error handling, and not found routes. The MongoDB database is hosted on MongoDB Atlas, and I use the Mongoose library to interact with it.  
+This is an Express.js server, currently deployed on [Fly.io](https://back-end-long-sea-8540.fly.dev). It contains validation of query parameters, error handling, and not found routes. The MongoDB database is hosted on MongoDB Atlas, and I use the Mongoose library to interact with it.  
 
 ## Endpoints
 ### GET "/artists": 
